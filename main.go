@@ -140,15 +140,14 @@ Isaiah 6:8`
 		panic(err)
 	}
 	assertEqual(_key, key)
+
 	dataB, err := io.ReadAll(reader)
 	if err != nil {
 		panic(err)
 	}
+
 	assertEqual(string(dataB), data)
 	conn.Close()
-
-	fmt.Println("test2 done")
-
 }
 
 // 生成一个随机 key
@@ -304,8 +303,8 @@ func testCase1() {
 }
 
 func main() {
-	fmt.Println("test0")
-
 	testCase0()
+	fmt.Println("test1")
+
 	testCase1()
 }

@@ -63,16 +63,21 @@ func (mc *MuxerConn) Write(buf []byte) (n int, err error) {
 	return
 }
 
-func (mc *MuxerConn) Close() (err error) {
+func (mc *MuxerConn) Free() bool {
 	closed := true
 	mc.closeOnce.Do(func() {
-		mc.parent.WriteData(Close, mc.key, nil)
 		closed = false
 		mc.closed.Store(true)
 		close(mc.queue)
 	})
 
-	if closed {
+	return closed
+}
+
+func (mc *MuxerConn) Close() (err error) {
+	if !mc.Free() {
+		mc.parent.WriteData(Close, mc.key, nil)
+	} else {
 		err = net.ErrClosed
 	}
 	return

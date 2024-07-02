@@ -82,6 +82,12 @@ func (nx *Muxer) WriteData(op Opcode, key string, buf []byte) (n int, err error)
 func (n *Muxer) Close() {
 	n.doStop()
 	n.cn.Close()
+
+	n.connMu.Lock()
+	for _, cn := range n.connMap {
+		cn.Free()
+	}
+	n.connMu.Unlock()
 }
 
 func (n *Muxer) writeLoop() {
@@ -145,7 +151,7 @@ func (n *Muxer) handleClose(key string) {
 	n.connMu.Unlock()
 
 	if mc != nil {
-		mc.Close()
+		mc.Free()
 	}
 }
 
