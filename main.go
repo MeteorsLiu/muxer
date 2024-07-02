@@ -301,11 +301,11 @@ func testCase1() {
 	}
 	assertEqual(keyCount, 2)
 	conn.Close()
-
-	fmt.Println("test1 done")
 }
 
 func main() {
+	fmt.Println("test0")
+
 	testCase0()
 	testCase1()
 }
